@@ -1,0 +1,137 @@
+# Secuencias 
+Secuencia de caracteres 1 - Televisores 
+Los datos que contiene cada televisor finalizan con un # y son:
+* Tipo: Smart o Led
+* Pulgadas: 2 caracteres, ej 32
+* Modelo: se desconoce la cantidad de caracteres que posee
+Se ubican agrupados por marcas y el fin de cada marca se indica con @
+
+Tipo(S o L )Pulgadas(2 caracteres)Modelo#Tipo(S o L )Pulgadas(2 caracteres)Modelo#...#...#@*
+
+Ejemplo: 
+S4343PFG5AA102#L3232PHG5001#...#@...#...#...#@*
+
+Secuancia de caracteres 2 - Marcas 
+Contiene los nombres de las marcas de TVs, cada una de ellas separadas por una cantidad indeterminata de espacios en blanco
+
+Existe una correspondencia uno a uno entre la secuancia 1 y 2.
+
+Se pide: 
+    1 - Crear una sec de salida con los datos de los TVs (pulgadas y modelo) de los televisores que sean Smart y de más de 40 pulgadas,
+        con el siguiente formato:
+        
+            Marca1-televiso1#televisor2#...#@Marca2-televisor1#televisor2#...#@MarcaN-....#@*
+
+        El fin de cada TV se indica con # y el fin de cada Marca con @.
+        Si no hay televisores que cumplan la condición, en la salida se debe escribir solo la marca seguida por un - y la @.
+    2 - Informar al final:
+        a - Total de televisores de cada tipo Smart(S) o Led(L) y porcentaje de cada uno sobre el total.
+        b - Cuantos TVs de la marca LG hay en la secuencia de salida.
+
+Accion Parcial2018 es: 
+    Ambiente
+
+		tvs, marcas, sal: secuencia de caracteres;
+		t, m, aux_marca: caracter;
+		posicion:= entero;
+		contv, contLG, contS, contLed, total:= entero;
+		LG: booleano;
+
+        Funcion Aentero(t: caracter): entero es: 
+            Segun (t) hacer:
+                '4': Aentero := 4;
+                '5': Aentero := 5;
+                '6': Aentero := 6;
+                '7': Aentero := 7;
+                '8': Aentero := 8;
+                '9': Aentero := 9;
+            Fin segun;
+        Fin Procedimiento;
+		
+	Proceso
+		Arrancar(tvs); Avz(tvs,t); 
+        Arrancar(marcas); Avz(marcas,m); 
+        Crear(sal);
+		
+        pos:=1;
+		contS,contLG,contLed:=0;
+		LG:= True;
+		
+		mientras NoFDS (tvs) hacer
+			
+			mientras t <> '@' hacer 
+				
+				mientras t <> '#' hacer 
+					
+					si (t = 'S' and posicion = 1) entonces
+						contS:= contS +1;
+						avz(tvs,t);
+						posicion:= posicion +1;
+						
+						si ( Aentero(t) > 4 ) entonces
+														
+							si m = 'L' entonces
+                                escribir(sal, m);
+                                avz(marcas,m);
+								
+								si m = 'G' entonces
+                                    escribir(sal, m);
+									avz(marcas, m);
+										
+									si m <> ' ' entonces;
+										LG:= False;
+                                    fin si;	
+                                sino 
+                                    LG := False;    
+								fin si;
+                            sino
+                                LG := False;    
+							fin si;
+								
+							mientras m <> ' ' hacer
+								escribir (sal,m);
+                                avz(marcas, m);
+							fin mientras;
+								
+							escribir(sal,'-');	
+						fin si;	
+							
+						repetir
+							escribir(sal,t);
+							avz(tvs,t);
+						hasta que t = '#';	
+						  
+						si LG = true entonces 
+							contLG:= contLG +1;
+							LG:= false;
+						fin si;		
+					sino 
+						contL:= contL +1;
+						Repetir
+							avz(tel,t);
+						hasta que t = '#';
+					fin si;
+					
+			    fin mientras;		
+                avz(tel,t);
+			    pos:= 1;
+		    fin mientras; @
+			
+		    LG:= True;
+				
+		    escribir(sal,'@');
+			
+		    repetir
+			    avz(marcas,m);
+		    hasta que m <> ' ';	
+	    fin mientras; NoFDS (tel)
+		
+        total:= contS + contL;
+
+        escribir('Hay un total de ', contS, ' Smart TVs. ');
+        escribir('Su porcentaje con respecto al total es de: ', ((contS*100)/total),'%');
+        escribir();
+        escribir('Hay un total de , contL, ' LED TVs. ');
+        escribir('Su porcentaje con respecto al toal es de: ', ((contL*100)/total) ,'%'); 		
+Fin accion.
+
